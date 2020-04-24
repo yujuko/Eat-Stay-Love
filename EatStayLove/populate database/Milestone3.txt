@@ -1,0 +1,116 @@
+Milestone 3: Database Population 
+Alicia Teo, Christina Chen, Fred Chang, Lucy Kuo
+
+7 SQL Queries with descriptions: (4,5 are more complex queries)
+
+1. This query will display the top 5 highest rated Marriott hotels and their ratings in Atlanta, GA. For our end product, we will have the user select the city in place of 'Atlanta, GA'
+Result schema: (hotel_name, rating)  
+
+SELECT hotel_name, rating 
+FROM (SELECT DISTINCT hotel_name, rating 
+FROM hotel  
+WHERE city_name = 'Atlanta' AND state = 'GA' AND rating > 0 
+ORDER BY rating DESC) 
+WHERE ROWNUM<= 5;
+
+2. This query will display the name and ratings of the top 3 highest rated Hawaiian restaurants. For our end product, we will have the user select which cuisine type they want and use this query in combination with a city. 
+Result schema: (restaurant_name, stars) 
+
+SELECT restaurant_name, stars 
+FROM (SELECT R.restaurant_name, R.stars
+FROM restaurant R JOIN RESTAURANT_ATTRIBUTES A ON R.restaurant_id = A.restaurant_id 
+WHERE R.is_restaurant = 1 AND A.attribute = 'Hawaiian' 
+ORDER BY stars DESC) 
+WHERE ROWNUM <=3;
+
+3. This query will display the top 5 restaurants in Las Vegas, NV with an overall Yelp rating of 4 or greater and with the restaurant having received more than 10 reviews.
+Result schema: (restaurant_name) 
+
+SELECT DISTINCT restaurant_name
+FROM (SELECT restaurant_name
+FROM RESTAURANT 
+WHERE is_restaurant = 1 AND stars >=4 AND review_count > 10 AND city_name = 'Las Vegas' AND state = 'NV'
+ORDER BY stars DESC) 
+WHERE ROWNUM<=5;
+
+4. This query will allow users to see the highest rated restaurant in Las Vegas, NV with the most number of Yelp Elite reviews. The restaurant name and most recent Yelp Elite review will be shown. In our final product, we will allow the user to select which city they want to see the highest rated and most Yelp Elite reviewed restaurant. 
+Result schema: (restaurant_name, review) 
+
+WITH t AS (
+SELECT R.restaurant_id AS id, count(*) as num
+FROM sml_RESTAURANT R JOIN sml_restaurant_reviews V ON R.restaurant_id = V.restaurant_id 
+JOIN sml_yelp_reviewers Y ON V.reviewer_id=Y.user_id
+WHERE R.is_restaurant = 1 AND Y.is_elite = 1 AND R.city_name = 'Las Vegas' AND R.state = 'NV'
+GROUP BY R.restaurant_id 
+HAVING count(*)= 
+	(SELECT MAX(num) 
+	FROM (SELECT R.restaurant_id, count(*) as num 
+	FROM RESTAURANT R JOIN sml_restaurant_reviews V ON R.restaurant_id = V.restaurant_id 
+	JOIN sml_yelp_reviewers Y ON V.reviewer_id=Y.user_id
+	WHERE R.is_restaurant = 1 AND Y.is_elite = 1 AND R.city_name = 'Las Vegas' AND R.state = 'NV'
+	GROUP BY R.restaurant_id)))
+SELECT restaurant_name, review_text, review_date
+FROM (SELECT R.restaurant_name, V.review_text, V.review_date
+FROM t, sml_RESTAURANT R JOIN sml_restaurant_reviews V on R.restaurant_id = V.restaurant_id
+WHERE R.restaurant_id = t.id
+ORDER BY V.review_date DESC) 
+WHERE ROWNUM = 1;
+
+5. For the city with the largest number of highly rated restaurants (4.5 and over) with at least 1 Yelp Elite review, show the most highly rated hotel. Show the hotel name and rating. 
+Result schema: (hotel name, rating) 
+
+WITH highlyRated AS (SELECT city_name AS c, num
+FROM (SELECT city_name, count(*) as num 
+FROM RESTAURANT R JOIN sml_restaurant_reviews V ON R.restaurant_id = V.restaurant_id 
+RIGHT JOIN yelp_reviewers Y ON V.reviewer_id=Y.user_id
+WHERE R.is_restaurant = 1 AND Y.is_elite = 1 AND R.stars>=4.5
+GROUP BY city_name
+ORDER BY num DESC) 
+WHERE ROWNUM=1)
+SELECT hotel_name, rating
+FROM ( 
+SELECT hotel_name, rating
+FROM hotel JOIN highlyRated on hotel.city_name = highlyrated.c
+WHERE rating > 0
+ORDER BY rating DESC) 
+where ROWNUM = 1; 
+
+
+6. This query will display the restaurant and review for the most recently Yelp reviewed restaurant in  Pittsburgh, PA. 
+Result schema: (restaurant_name, review)
+
+SELECT restaurant_name, review_text
+FROM (SELECT R.restaurant_name, V.review_text
+FROM SML_RESTAURANT R JOIN sml_restaurant_reviews V ON R.restaurant_id = V.restaurant_id 
+WHERE R.is_restaurant = 1 AND R.city_name = 'Pittsburgh' AND R.state = 'PA'
+ORDER BY review_date DESC) 
+WHERE ROWNUM<=1;
+
+7. This query will show a city that has both 5-star Marriott hotels and the greatest number of restaurants with 4.9 or over Yelp ratings. 
+Result schema: (city_name) 
+
+WITH tophotels as (SELECT city_name 
+FROM hotel 
+WHERE rating = 5)
+SELECT city_name
+FROM (SELECT R.city_name, count(*) as num
+FROM RESTAURANT R JOIN tophotels ON R.city_name = tophotels.city_name
+WHERE R.stars >= 4.9
+GROUP BY R.city_name)  
+WHERE ROWNUM=1
+ORDER BY num;
+
+Credentials: 
+We are hosting our database on AWS RDS. 
+
+Our credentials for accessing the database are: 
+Connect string:
+
+sqlplus 'ESL550Proj@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=cis550proj.crcraxcadczo.us-east-1.rds.amazonaws.com)(PORT=1521))(CONNECT_DATA=(SID=ESL)))'
+
+User ID: ESL550Proj
+Password: Indictment1!
+Database Schema Name: CIS550Proj
+
+
+

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="angularjsNodejsTutorial">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>EatStayLove - Step 1: City & Landmarks</title>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>
+	<script src="javascripts/app.js" type="text/javascript"></script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHY8n7Nj3m8Dr12zcvoGhvwAabGEva-fw&callback=initMap"></script>
+
+	<!-- Stylesheets start -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="css/navbar.css">
+	<link rel="stylesheet" type="text/css" href="css/index.css">
+	<link rel="stylesheet" type="text/css" href="css/grid.css">
+	<link rel="stylesheet" type="text/css" href="css/gmaps.css">
+	<!-- Stylesheets end -->
+
+</head>
+
+<body>
+	<!-- Navbar -->
+	<nav class="navbar navbar-expand-lg">
+		<a class="nav-icon navbar-brand center" href="/">
+			<img src="assets/esl_icon_small.png">
+		</a>
+		<div class="multi-step">
+			<ul class="multi-step-list">
+				<li class="multi-step-item active current">
+					<a href="/">
+						<div class="item-wrap">
+							<p class="item-title">Step 1</p>
+							<p class="item-subtitle">Choose city and landmarks</p>
+						</div>
+					</a>
+				</li>
+				<li class="multi-step-item">
+					<!-- <a href=""> -->
+						<div class="item-wrap">
+							<p class="item-title">Step 2</p>
+							<p class="item-subtitle">Choose hotel</p>
+						</div>
+					<!-- </a> -->
+				</li>
+				<li class="multi-step-item">
+					<!-- <a href=""> -->
+						<div class="item-wrap">
+							<p class="item-title">Step 3</p>
+							<p class="item-subtitle">Restaurant recommendations</p>
+						</div>
+					<!-- </a> -->
+				</li>
+				<li class="multi-step-item">
+<!-- 					<a href=""> -->
+						<div class="item-wrap">
+							<p class="item-title">Step 4</p>
+							<p class="item-subtitle">Trip Summary</p>
+						</div>
+					<!-- </a> -->
+				</li>
+			</ul>
+		</div>
+	</nav>
+
+	<!-- User Content -->
+	<div class="container-fluid">
+	<div ng-controller="citiesController">		
+		<div class="container-left">
+			<div class="container-left">
+				<div class="container-select-city">
+					<!--------------------------- SELECT CITY --------------------------->
+					<div class="h5">Select your destination city</div>
+					<form name="some">
+						<label>
+							<input type="text" list="dataList" ng-model = "selectedCity">
+						</label>
+						<datalist id="dataList">
+							<option ng-repeat="c in cities | filter:inputCity" value="{{c.city}}, {{c.state}}"></option>
+						</datalist>
+						<button class="button" id="citySubmitBtn" ng-click="submitCity()">Submit</button>
+					</form>
+					<!--------------------------- SELECT ATTRACTIONS --------------------------->
+					<form ng-show = "showAttractions">
+						<div class="h5">Select attractions</div>
+						<div ng-repeat = 'a in attractions'>
+							<label class="container">{{a.venue.name}}
+							 <input type="checkbox" id="{{a}}" value="{{a}}" ng-model="a.selected">
+							 <span class="checkmark"></span>
+						 </div>
+					</form>
+					<div class="next-button" ng-show="showAttractions">
+							 <button class="button btn-lg" type="submit" value="Submit" ng-click="submitAttractions()" onclick="window.location.href = '/hotels';" >Next: Choose Hotel</button>
+					 </div>
+				</div>
+			</div>
+			<div class="container-right">
+				<!--------------------------- CITIES RECOMMENDATIONS--------------------------->
+				<div class="container-popular">
+					<div class="h3">Popular Cities</div>
+					<br>
+					<div ng-repeat = 'rc in topCities'>
+						<h5>{{rc.city}}, {{rc.state}}</h5>
+						<div>{{rc.num_hotel}} top hotels - average rating {{rc.avg_hotel_rating}}</div>
+						<div>{{rc.num_restaurant}} top restaurants - average rating {{rc.avg_restaurant_rating}}</div>
+						<br>
+					</div>
+				</div>
+        <!--------------------------- FIVE STARS RESTAURANTS--------------------------->
+        <div class="container-popular">
+        	<br>
+          <div class="h3">Top Trending Restaurant</div>
+          <div ng-model = 'fiveStarsRestaurants'>
+          	<div class="top-img-box"><img class="img" ng-src="{{fiveStarsRestaurants.img}}"></div>
+            <h5>{{fiveStarsRestaurants.restaurant_name}} {{fiveStarsRestaurants.city_name}}</h5>
+            <div>{{fiveStarsRestaurants.rating}} </div>
+            <div>{{fiveStarsRestaurants.numEliteReviews}} </div>
+            <img class="top-img" ng-src="{{rc.img}}">
+            <br>
+          </div>
+        </div>
+
+			</div>
+		</div>
+		<div class="container-right">
+			<div id="googleMap" style="height: 700px;"></div>
+		</div>
+
+
+
+
+	</div>
+	</div>
+
+
+
+	 <!-- Include these before the end of body tag in every HTML file -->
+	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+	 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+ </body>
+
+ </html>

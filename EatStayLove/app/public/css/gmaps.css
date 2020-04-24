@@ -1,0 +1,11 @@
+/* Styles for Google Maps */
+
+
+/* Always set the map height explicitly to define the size of the div element that contains the map. */
+#googleMap {
+	margin: 0;
+	padding: 0;
+	min-height: 800px;
+	height: 100% !important;
+	width: 100%;
+}

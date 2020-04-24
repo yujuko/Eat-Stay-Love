@@ -1,0 +1,17 @@
+---
+:id: 24462124
+:submitters:
+- :name: Yuju Kuo
+  :email: yujuko@seas.upenn.edu
+- :name: Fred Pei-Jan Chang
+  :email: fpc@seas.upenn.edu
+- :name: ALICIA JING YI TEO
+  :email: alteo@wharton.upenn.edu
+- :name: Christina Chen
+  :email: chenchri@pennlaw.upenn.edu
+:created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2019-11-12 02:06:30.086674000 Z
+  zone: !ruby/object:ActiveSupport::TimeZone
+    name: America/Los_Angeles
+  time: 2019-11-11 18:06:30.086674000 Z
+:status: processed

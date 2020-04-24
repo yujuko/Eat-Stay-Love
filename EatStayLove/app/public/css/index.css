@@ -1,0 +1,232 @@
+/* NavBar */
+.navbar {
+  background-color: white;
+  height: 10vh !important;
+  min-width: 1000px !important;
+}
+
+.nav-icon {
+  width: 10vh;
+}
+
+
+/* Main Website Containers */
+.container-fluid {
+  padding-right: 0px;
+  padding-left: 0px;
+  width: 100%;
+  min-width: 1000px;
+  height: 100%;
+}
+
+.container-left {
+  float: left;
+  width: 60%;
+  height: 85vh !important;
+  overflow-y: auto;
+}
+
+.container-right {
+  position: relative;
+  float: right;
+  width: 40%;
+  height: 90vh !important;
+}
+
+.container-select-city {
+  margin-top: 20px;
+  margin-left: 40px;
+}
+
+.container-popular {
+  margin-top: 20px;
+}
+
+/* Home Page */
+.top-img-box {
+  width: 70%;
+  height: 15vh;
+  margin-bottom: 3vh;
+  object-fit: contain;
+}
+
+.top-img {
+  width: 100%;
+  margin-top: 5%;
+  justify-content: center;
+  transition: 0.3s;
+  max-height: 100%;
+  max-width: 100%;
+}
+
+
+/* Hotel Component */
+.hotel-row {
+  display: grid;
+  grid-template-columns: minmax(200px, 0.9fr) 350px 150px;
+  background-color: #fff;
+  color: #444;
+}
+
+
+/* Restaurant Component */
+.top-restaurant-row {
+  display: grid;
+  grid-template-columns: minmax(100px, 0.5fr) 350px 150px;
+  background-color: #fff;
+  color: #444;
+}
+
+.left-restaurant {
+  padding-right: 10%;
+}
+
+.mid-restaurant {
+  padding-right: 5%;
+}
+
+.right-restaurant {
+  text-align: right;
+}
+
+.min-img-grid {
+  /*width: 500px;*/
+}
+
+.rest-imageBox {
+  height: 60%;
+  display: flex;
+}
+
+.rest-img {
+  width: 100%;
+  margin-top: 2%;
+  margin-right: 5%;
+  justify-content: center;
+  transition: 0.3s;
+  max-height: 80%;
+  max-width: 100%;
+  object-fit: cover;
+}
+
+.rest-img:hover {
+  opacity: 0.5;
+}
+
+
+/* Shared Components */
+
+.box {
+  font-size: 80%;
+}
+
+.box.b {
+  text-align: left;
+}
+
+.box.c {
+  text-align: right;
+}
+
+.next-button {
+}
+
+
+
+/* Summary Page Images */
+
+.imageBox-summary {
+  height: 150px;
+  width: 380px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.img-summary {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+
+
+
+
+/* The container */
+.button {
+  background-color: #2196F3;
+  border: none;
+  color: white;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 17px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  color: #2196F3;
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
